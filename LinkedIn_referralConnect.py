@@ -1,8 +1,16 @@
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 import time
+#mention your email and password
+email = '-------------------------'
+password = '###############'
 
-driver = webdriver.Chrome('C:/Users/gsuni/chromedriver.exe')
+companyName = "Groww"
+job_link = "https://groww.skillate.com/jobs/44512"
+
+s = Service('C:/Users/gsuni/chromedriver.exe')
+driver = webdriver.Chrome(service=s)
 driver.set_window_size(1024, 600)
 driver.maximize_window()
 driver.get('https://www.linkedin.com')
@@ -11,25 +19,21 @@ time.sleep(2)
 
 #********** Message  *************
 
-companyName = "jpmorgan chase & co."
-describe = "I'm Sunil, Can you please refer me for the below mention Job role at "+companyName+" \n\nJob link: "
-job_link = "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210117222/?utm_medium=jobshare"
-resume_link = "\n\nResume Link: https://drive.google.com/file/d/1M4QVN76gcNl55qnNUaGVOw38wA69AYqA/view"
+describe = "I'm Sunil, Can you please refer me for the below mention Job role at "+companyName+"\nJob link: "
+
+resume_link = "\nResume Link: https://drive.google.com/file/d/1M4QVN76gcNl55qnNUaGVOw38wA69AYqA/view "
 
 message_format = describe+job_link+resume_link
 
 #***************** totalConnections ************
-totalConnections = 20
+totalConnections = 25
 
 #********** LOGIN ********************
-#mention your email and password
-email = ''
-password = ''
 username = driver.find_element("xpath","//input[@name='session_key']")
-password = driver.find_element("xpath","//input[@name='session_password']")
+authentication = driver.find_element("xpath","//input[@name='session_password']")
 
 username.send_keys(email)
-password.send_keys(password)
+authentication.send_keys(password)
 time.sleep(2)
 
 submit = driver.find_element("xpath","//button[@type='submit']").click()
@@ -40,7 +44,7 @@ time.sleep(2)
 textBox = driver.find_element("xpath","//input[@placeholder='Search']")
 textBox.send_keys(companyName)
 textBox.send_keys(Keys.ENTER)
-time.sleep(2)
+time.sleep(5)
 people_button = driver.find_element("xpath","//button[normalize-space()='People']").click()
 time.sleep(2)
 
