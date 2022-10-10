@@ -3,11 +3,11 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 import time
 #mention your email and password
-email = '-------------------------'
-password = '###############'
+email = '--------------------------'
+password = '--------'
 
-companyName = "Groww"
-job_link = "https://groww.skillate.com/jobs/44512"
+companyName = "BlackLine"
+job_link = "https://careers.blackline.com/careers-home/jobs/1937?lang=en-us"
 
 s = Service('C:/Users/gsuni/chromedriver.exe')
 driver = webdriver.Chrome(service=s)
@@ -21,7 +21,7 @@ time.sleep(2)
 
 describe = "I'm Sunil, Can you please refer me for the below mention Job role at "+companyName+"\nJob link: "
 
-resume_link = "\nResume Link: https://drive.google.com/file/d/1M4QVN76gcNl55qnNUaGVOw38wA69AYqA/view "
+resume_link = "\nResume Link: https://bit.ly/3eK3oz8 "
 
 message_format = describe+job_link+resume_link
 
@@ -57,6 +57,16 @@ while totalConnections>0:
     if connect_buttons:
         for btn in connect_buttons:
             driver.execute_script("arguments[0].click();", btn)
+            try:
+                if driver.find_element("xpath","//button[@aria-label='Work Colleagues']")>0:
+                    work_colleagues = driver.find_element("xpath","//button[@aria-label='Work Colleagues']")
+                    driver.execute_script("arguments[0].click();", work_colleagues)
+                    time.sleep(2)
+                    connect = driver.find_element("xpath","//button[@aria-label='Connect']")
+                    driver.execute_script("arguments[0].click();", connect)
+                    time.sleep(2)
+            except:
+                print("No work colleagues")
             person_name =driver.find_element( "xpath","//span[@class='flex-1']//strong").text
             time.sleep(2)
             add_note = driver.find_element("xpath","//button[@aria-label='Add a note']")
