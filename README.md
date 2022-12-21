@@ -1,7 +1,6 @@
-##LinkedIn-RefferalConnect
+## LinkedIn-RefferalConnect
 
 Its such painful job of sending same referral message to multiple persons through connection requests, while you are looking out for new job. Instead of manually sending customized connection request, I have created script which sends customized connection requests to multiple employees of a company.
-
 
 
 <video
