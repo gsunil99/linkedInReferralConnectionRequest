@@ -4,7 +4,7 @@ Its such painful job of sending same referral message to multiple persons throug
 
 
 <video
-src="https://user-images.githubusercontent.com/56781242/208914144-4fa3dbac-c345-4539-a9a5-39e5646c9037.mp4">
+src="https://user-images.githubusercontent.com/56781242/208915905-ca655537-0ae8-4f3f-829a-cdacf55f8fda.mp4">
 </video>
 
 ## How to run the project!
@@ -13,7 +13,8 @@ src="https://user-images.githubusercontent.com/56781242/208914144-4fa3dbac-c345-
  
  ### - Run Python file
  > ```python LinkedIn_referralConnect.py```
- 
+
+
  ## Want to Contribute, if you find any bug or want to upgrade a feature,
 Follow these steps:
 - Fork the project.
