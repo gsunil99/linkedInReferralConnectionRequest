@@ -9,7 +9,8 @@ password = secrets.LINKEDIN_PASSWORD
 
 companyName = "RamSoft"
 
-s = Service('/Users/sunilg/Desktop/linkedconnect/chromedriver')
+s = Service(
+    '/Users/sunilg/Desktop/linkedInReferralConnectionRequest/chromedriver')
 driver = webdriver.Chrome(service=s)
 driver.set_window_size(1024, 600)
 driver.maximize_window()
