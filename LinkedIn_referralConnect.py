@@ -1,105 +1,135 @@
+'linked referral connect'
+import secrets
+import requests
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-import time
-import secrets
-# mention your email and password
-email = secrets.EMAIL
-password = secrets.LINKEDIN_PASSWORD
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException
 
-companyName = "RamSoft"
 
+# ***************** company detail ************
+COMPANY_NAME = "bright money"
+LONG_URL = "https://www.brightmoney.co/careers"
+
+# ***************** totalConnections ************
+totalConnections = 15
+
+
+# ***************** shorturl function ***********
+def shorten_url(long_url):
+    'shorten the url'
+    try:
+        response = requests.get(
+            f'http://tinyurl.com/api-create.php?url={long_url}')
+        if response.status_code == 200:
+            return response.text
+        else:
+            print(
+                f"Failed to shorten URL. Status code: {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return None
+
+
+# ************** mention your EMAIL and PASSWORD *******
+EMAIL = secrets.EMAIL
+PASSWORD = secrets.LINKEDIN_PASSWORD
+
+
+# **************** service started ************
 s = Service(
     '/Users/sunilg/Desktop/linkedInReferralConnectionRequest/chromedriver')
 driver = webdriver.Chrome(service=s)
 driver.set_window_size(1024, 600)
 driver.maximize_window()
 driver.get('https://www.linkedin.com')
-time.sleep(2)
 
+# ******* shorten url ********
+short_url = shorten_url(LONG_URL)
+print(short_url)
 
 # ********** Message  *************
+describe = "I'm Sunil currently working as a fullstack software developer at CCD. I have worked on technology such as java, spring, python, Django, aws-chalice, mongodb."
+job_desc = "\nCan you please refer me for this job: " + short_url
+resume_link = "\nResume Link: https://tinyurl.com/mrybz3k8"
 
-describe = "I'm sunil currently working as a fullstack software developer at climate connect Digital. I have worked on technology such as java, spring, python, Django, aws-chalice, mongodb."
-job_desc = "\nCan you please refer me for this job: https://tinyurl.com/khb6phs6"
-resume_link = "\nResume Link: https://tinyurl.com/ycynkw2z "
-
-message_format = describe+job_desc+resume_link
+message_format = describe + job_desc + resume_link
 print(message_format)
-# ***************** totalConnections ************
-totalConnections = 20
+
 
 # ********** LOGIN ********************
-username = driver.find_element("xpath", "//input[@name='session_key']")
-authentication = driver.find_element(
-    "xpath", "//input[@name='session_password']")
+wait = WebDriverWait(driver, 20)  # Adjust the timeout as needed
 
-username.send_keys(email)
-authentication.send_keys(password)
-time.sleep(2)
+username = wait.until(EC.presence_of_element_located((By.NAME, 'session_key')))
+authentication = wait.until(
+    EC.presence_of_element_located((By.NAME, 'session_password')))
 
-submit = driver.find_element("xpath", "//button[@type='submit']").click()
-time.sleep(2)
+username.send_keys(EMAIL)
+authentication.send_keys(PASSWORD)
+
+submit = wait.until(EC.element_to_be_clickable(
+    (By.XPATH, "//button[@type='submit']")))
+submit.click()
 
 # **************** Company specific search **********************
 
-textBox = driver.find_element("xpath", "//input[@placeholder='Search']")
-textBox.send_keys(companyName)
+textBox = wait.until(EC.presence_of_element_located(
+    (By.XPATH, "//input[@placeholder='Search']")))
+textBox.send_keys(COMPANY_NAME)
 textBox.send_keys(Keys.ENTER)
-time.sleep(5)
-people_button = driver.find_element(
-    "xpath", "//button[normalize-space()='People']").click()
-time.sleep(2)
-
+wait.until(EC.presence_of_element_located((By.XPATH, "//body")))
+people_button = wait.until(EC.element_to_be_clickable(
+    (By.XPATH, "//button[normalize-space()='People']")))
+people_button.click()
 
 # *********************** Sending Connection request *******************
 while totalConnections > 0:
-    # print('inside')
-    # all_buttons = driver.find_elements("tag name", "button")
-    # connect_buttons = [btn for btn in all_buttons if btn.text == "Connect"]
-    connect_buttons = driver.find_elements(
-        "xpath", "//button[.//li-icon[@type='connect']]")
-    time.sleep(2)
-    if connect_buttons:
-        for btn in connect_buttons:
-            driver.execute_script("arguments[0].click();", btn)
-            try:
-                if driver.find_element("xpath", "//button[@aria-label='Work Colleagues']") > 0:
-                    work_colleagues = driver.find_element(
-                        "xpath", "//button[@aria-label='Work Colleagues']")
-                    driver.execute_script(
-                        "arguments[0].click();", work_colleagues)
-                    time.sleep(2)
-                    connect = driver.find_element(
-                        "xpath", "//button[@aria-label='Connect']")
-                    driver.execute_script("arguments[0].click();", connect)
-                    time.sleep(2)
-            except:
-                print("No work colleagues")
-            person_name = driver.find_element(
-                "xpath", "//span[@class='flex-1']//strong").text
-            time.sleep(2)
-            add_note = driver.find_element(
-                "xpath", "//button[@aria-label='Add a note']")
-            driver.execute_script("arguments[0].click();", add_note)
-            time.sleep(2)
-            textArea = driver.find_element(
-                "xpath", "//textarea[@id='custom-message']")
-            final_message = "Hi "+person_name+" \n"+message_format
-            textArea.send_keys(final_message)
-            send = driver.find_element(
-                "xpath", "//button[@aria-label='Send now']")
-            driver.execute_script("arguments[0].click();", send)
-            time.sleep(1)
-            close = driver.find_element(
-                "xpath", "//button[@aria-label='Dismiss']")
-            driver.execute_script("arguments[0].click();", close)
-            time.sleep(2)
-            totalConnections = totalConnections-1
-    else:
+    connect_buttons = ''
+    try:
+        wait.until(EC.presence_of_element_located((By.XPATH, "//body")))
+        connect_buttons = wait.until(EC.presence_of_all_elements_located(
+            (By.XPATH, "//button[contains(@aria-label, 'connect')]")))
+        if connect_buttons:
+            for btn in connect_buttons:
+                try:
+                    driver.execute_script("arguments[0].click();", btn)
+                    person_name = wait.until(EC.presence_of_element_located(
+                        (By.XPATH, "//span[@class='flex-1']//strong"))).text
+                    add_note = wait.until(EC.element_to_be_clickable(
+                        (By.XPATH, "//button[@aria-label='Add a note']")))
+                    add_note.click()
+
+                    textArea = wait.until(EC.presence_of_element_located(
+                        (By.XPATH, "//textarea[@id='custom-message']")))
+                    final_message = "Hi " + person_name + "\n" + message_format
+                    final_message = final_message.encode(
+                        'unicode_escape').decode()
+                    textArea.send_keys(final_message)
+
+                    send = wait.until(EC.element_to_be_clickable(
+                        (By.XPATH, "//button[@aria-label='Send now']")))
+                    send.click()
+
+                    totalConnections -= 1
+                except StaleElementReferenceException as stale_ex:
+                    print("StaleElementReferenceException occurred. Retrying...")
+                    print(str(stale_ex))
+                    continue
+
+    except (TimeoutException, NoSuchElementException) as e:
+        print('Timeoutexception, No such element exception')
+        print(str(e))
         driver.execute_script(
             "window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(2)
-        next = driver.find_element("xpath", "//button[@aria-label='Next']")
-        driver.execute_script("arguments[0].click();", next)
-        time.sleep(4)
+        next_button = wait.until(EC.element_to_be_clickable(
+            (By.XPATH, "//button[@aria-label='Next']")))
+        next_button.click()
+        continue
+    except Exception as e:
+        print(' outer exception')
+        print(str(e))
+        break
