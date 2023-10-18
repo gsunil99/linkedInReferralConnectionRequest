@@ -53,9 +53,9 @@ short_url = shorten_url(LONG_URL)
 print(short_url)
 
 # ********** Message  *************
-describe = "I'm Sunil currently working as a fullstack software developer at CCD. I have worked on technology such as java, spring, python, Django, aws-chalice, mongodb."
-job_desc = "\nCan you please refer me for this job: " + short_url
-resume_link = "\nResume Link: https://tinyurl.com/mrybz3k8"
+describe = "I'm Sunil, fullstack software developer at CCD."
+job_desc = "\n Can you please refer me for this job: " + short_url
+resume_link = "\n Resume Link: https://tinyurl.com/mrybz3k8"
 
 message_format = describe + job_desc + resume_link
 print(message_format)
@@ -106,8 +106,8 @@ while totalConnections > 0:
                     textArea = wait.until(EC.presence_of_element_located(
                         (By.XPATH, "//textarea[@id='custom-message']")))
                     final_message = "Hi " + person_name + "\n" + message_format
-                    final_message = final_message.encode(
-                        'unicode_escape').decode()
+                    # final_message = final_message.encode(
+                    #     'unicode_escape').decode()
                     textArea.send_keys(final_message)
 
                     send = wait.until(EC.element_to_be_clickable(
