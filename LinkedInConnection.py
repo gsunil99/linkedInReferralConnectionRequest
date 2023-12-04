@@ -10,7 +10,7 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException,
 
 
 # ***************** company detail ************
-COMPANY_NAME = "Appviewx"
+COMPANY_NAME = "FreshToHome"
 
 # ***************** totalConnections ************
 totalConnections = 30

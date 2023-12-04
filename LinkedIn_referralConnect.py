@@ -1,6 +1,7 @@
 'linked referral connect'
 import secrets
 import requests
+import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
@@ -11,8 +12,8 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException,
 
 
 # ***************** company detail ************
-COMPANY_NAME = "bright money"
-LONG_URL = "https://www.brightmoney.co/careers"
+COMPANY_NAME = "BNYM"
+LONG_URL = "https://siemensgamesa.wd3.myworkdayjobs.com/SGRE/job/IN---Bangalore---Goldhill-Supreme/Software-Developer_R-32387?source=Linkedin"
 
 # ***************** totalConnections ************
 totalConnections = 15
@@ -54,8 +55,9 @@ print(short_url)
 
 # ********** Message  *************
 describe = "I'm Sunil, fullstack software developer at CCD."
-job_desc = "\n Can you please refer me for this job: " + short_url
-resume_link = "\n Resume Link: https://tinyurl.com/mrybz3k8"
+job_desc = "\n Can you please refer me for this job at BNYM : 43521"
+resume_link = "\n"
+#  Resume Link: https://tinyurl.com/mrybz3k8
 
 message_format = describe + job_desc + resume_link
 print(message_format)
@@ -111,9 +113,10 @@ while totalConnections > 0:
                     textArea.send_keys(final_message)
 
                     send = wait.until(EC.element_to_be_clickable(
-                        (By.XPATH, "//button[@aria-label='Send now']")))
-                    send.click()
+                        (By.XPATH, "//button[@aria-label='Send now' and not(@disabled)]")))
 
+                    send.click()
+                    time.sleep(2)
                     totalConnections -= 1
                 except StaleElementReferenceException as stale_ex:
                     print("StaleElementReferenceException occurred. Retrying...")
